@@ -1,0 +1,27 @@
+/* some basic css reset and core stylings */
+
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+/* to enable percentage based height */
+html,
+body {
+  height: 100%;
+}

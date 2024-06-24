@@ -1,0 +1,17 @@
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 2em;
+}
+
+.logo__img {
+  width: 3rem;
+  object-fit: contain;
+}
+
+.logo__text {
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
