@@ -2,8 +2,8 @@
 
 ## Board class
 
-- board() should return a 2 dimensional array that resembels a 10x10 board
-- placeShip(ship, startBlock, orientation) should place the ship on to the board,
+- board should return a 2 dimensional array that resembels a 10x10 board ✅
+- placeShip(ship, shipSize, startCords, orientation) should place the ship on to the board,
   throw error if ship is out of bound/illegal to place on the given startBlock
 - attackShip(block) should take the block.
   if a ship present in the block, deal damage to it.
