@@ -90,3 +90,55 @@ describe("areCordsOccuipiable method", () => {
     expect(board.areCordsOccupiable(cords2)).toBe(false);
   });
 });
+
+describe("attack method", () => {
+  const board = new Board();
+  const shipSize = 3;
+  const ship = new Ship(shipSize);
+  const cord = [0, 0];
+
+  test("sets block's isAttacked to true", () => {
+    const [nthRow, nthBlock] = [1, 2];
+    board.attack(nthRow, nthBlock);
+
+    const block = board.body[nthRow][nthBlock];
+    expect(block.isAttacked).toBe(true);
+  });
+
+  test("if a ship is present in the cordinate, hit it!", () => {
+    board.placeShip(ship, generateShipCords(...cord, shipSize));
+    board.attack(...cord);
+
+    expect(ship.health).toBe(shipSize - 1);
+  });
+
+  test("do not hit the ship again, if a block is already attacked", () => {
+    const shipPrevHealth = ship.health;
+    board.attack(...cord);
+
+    expect(ship.health).toBe(shipPrevHealth);
+  });
+});
+
+describe("numberOfAvailableShips", () => {
+  const board = new Board();
+
+  test("returns number of available ships on the board", () => {
+    expect(board.numberOfAvailableShips).toBe(0);
+
+    board.placeShip(new Ship(3), generateShipCords(0, 0, 3));
+    expect(board.numberOfAvailableShips).toBe(1);
+  });
+
+  test("number decrements if a ship is sunk", () => {
+    const cord = [3, 3];
+    const shipSize = 1;
+
+    board.placeShip(new Ship(shipSize), generateShipCords(...cord, shipSize));
+    expect(board.numberOfAvailableShips).toBe(2);
+
+    const prevNumOfAvailShips = board.numberOfAvailableShips;
+    board.attack(...cord); // ship is sunk as its health is 0
+    expect(board.numberOfAvailableShips).toBe(prevNumOfAvailShips - 1);
+  });
+});

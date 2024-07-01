@@ -3,12 +3,12 @@
 ## Board class
 
 - board should return a 2 dimensional array that resembels a 10x10 board ✅
-- placeShip(ship, shipSize, startCords, orientation) should place the ship on to the board,
-  throw error if ship is out of bound/illegal to place on the given startBlock
-- attackShip(block) should take the block.
+- areCordsOccupiable(cords) should return a boolean if ship can be placed legally ✅
+- placeShip(ship, cords) should place the ship on to the board ✅
+- attack(nthRow, nthBlock) should take the cordinate block.
   if a ship present in the block, deal damage to it.
-  ignore, if the block already discovered. (allow the player to take another block)
-- availableShips() should return an array of how many ships are still present on the ship
+  ignore, if the block already attacked. (allow the player to take another block). ✅
+- availableShips method should return an array of how many ships are still present on the ship ✅
 
 ## Ship class
 

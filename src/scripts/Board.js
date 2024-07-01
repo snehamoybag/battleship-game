@@ -99,6 +99,30 @@ class Board {
       block.ship = ship; // assigning the block' ship property to be the argument ship
     });
   }
+
+  attack(nthRow, nthBlock) {
+    const block = this.body[nthRow][nthBlock];
+
+    if (!block.isAttacked && block.ship) {
+      block.ship.getHit();
+    }
+
+    block.isAttacked = true; // mark the block as attacked
+  }
+
+  get numberOfAvailableShips() {
+    const foundShips = new Set();
+
+    this.body.forEach((row) =>
+      row.forEach((block) => {
+        const ship = block.ship;
+
+        if (ship && !ship.isSunk) foundShips.add(ship);
+      }),
+    );
+
+    return foundShips.size;
+  }
 }
 
 export default Board;
