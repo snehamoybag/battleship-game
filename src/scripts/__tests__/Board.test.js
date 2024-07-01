@@ -27,10 +27,6 @@ describe("each row in a board has 10 blocks in it", () => {
   });
 });
 
-/* TODO */
-// test areCordsOccupiable method
-// describe("areCordsOccupiable method", () => {})
-
 describe("placeShip method", () => {
   const board = new Board();
 
@@ -47,5 +43,50 @@ describe("placeShip method", () => {
     );
 
     expect(isShipPlaced).toBe(true);
+  });
+});
+
+describe("areCordsOccuipiable method", () => {
+  const board = new Board();
+  const [startRowIndex, startBlockIndex] = [1, 1];
+
+  test("returns true if there are no ship present within one block raduis from the cords", () => {
+    const shipSize = 4;
+    const cords = generateShipCords(
+      startRowIndex,
+      startBlockIndex,
+      shipSize,
+      "horizontal",
+    );
+
+    expect(board.areCordsOccupiable(cords)).toBe(true);
+
+    board.placeShip(new Ship(shipSize), cords); // ship is placed for below test
+  });
+
+  test("returns false if there are ships within one block raduis from the cords", () => {
+    const shipSize = 3;
+    const cords0 = generateShipCords(
+      startRowIndex,
+      startBlockIndex,
+      shipSize,
+      "horizontal",
+    );
+    const cords1 = generateShipCords(
+      startRowIndex + 1,
+      startBlockIndex,
+      shipSize,
+      "horizontal",
+    );
+    const cords2 = generateShipCords(
+      startRowIndex,
+      startBlockIndex + 1,
+      shipSize,
+      "horizontal",
+    );
+
+    expect(board.areCordsOccupiable(cords0)).toBe(false);
+    expect(board.areCordsOccupiable(cords1)).toBe(false);
+    expect(board.areCordsOccupiable(cords2)).toBe(false);
   });
 });
