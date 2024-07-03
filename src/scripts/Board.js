@@ -1,4 +1,6 @@
 import Block from "./Block";
+import Ship from "./Ship";
+import getRandomNumInRange from "./utils/getRandomNumInRange";
 
 class Board {
   #generateBoardBody() {
@@ -17,15 +19,34 @@ class Board {
     return body;
   }
 
-  #body = this.#generateBoardBody();
+  #generateShipCords(
+    startRowIndex,
+    startBlockIndex,
+    shipSize,
+    orientation = "horizontal",
+  ) {
+    let cords = [];
 
-  get body() {
-    return this.#body;
+    for (let i = 0; i < shipSize; i++) {
+      switch (orientation) {
+        case "horizontal":
+          cords.push([startRowIndex, startBlockIndex + i]);
+          break;
+        case "vertical":
+          cords.push([startRowIndex + i, startBlockIndex]);
+          break;
+        default:
+          cords = [];
+          break;
+      }
+    }
+
+    return cords;
   }
 
-  #getBlock(cord) {
+  #getBlock(body, cord) {
     const [rowIndex, blockIndex] = cord;
-    return this.body[rowIndex][blockIndex];
+    return body[rowIndex][blockIndex];
   }
 
   #getIsCordInbound(cord = []) {
@@ -42,11 +63,11 @@ class Board {
     return true;
   }
 
-  #getIsCordOccupiable(cord = []) {
+  #getIsCordOccupiable(body, cord = []) {
     const isCordInbound = this.#getIsCordInbound(cord);
     if (!isCordInbound) return false;
 
-    const block = this.#getBlock(cord);
+    const block = this.#getBlock(body, cord);
     const isShipPresentInBlock = Boolean(block.ship);
     if (isShipPresentInBlock) return false;
 
@@ -71,7 +92,7 @@ class Board {
       const isCordInbound = this.#getIsCordInbound(cordValue);
       if (!isCordInbound) continue; // to next cord
 
-      const block = this.#getBlock(cordValue);
+      const block = this.#getBlock(body, cordValue);
       const isShipInBlock = Boolean(block.ship);
       if (isShipInBlock) return false; // cordinate is not occupiable
     }
@@ -80,12 +101,12 @@ class Board {
     return true;
   }
 
-  areCordsOccupiable(cords) {
+  #areCordsOccupiable(body, cords) {
     for (let i = 0; i < cords.length; i++) {
       const cord = cords[i];
 
       // check if another ship is already present within one block from the cordinate
-      const isOccupiable = this.#getIsCordOccupiable(cord);
+      const isOccupiable = this.#getIsCordOccupiable(body, cord);
       if (!isOccupiable) return false;
     }
 
@@ -93,15 +114,85 @@ class Board {
     return true;
   }
 
-  placeShip(ship, cords = []) {
+  #getRandomShipOrientation = () => {
+    return Math.random() > 0.5 ? "horizontal" : "vertical";
+  };
+
+  // generates 10 ships
+  #generateShips() {
+    const ships = [];
+
+    let shipQuantity = 4;
+    let shipSize = 1;
+
+    while (ships.length < 10) {
+      for (let i = 0; i < shipQuantity; i++) {
+        ships.push(new Ship(shipSize));
+      }
+
+      shipQuantity -= 1;
+      shipSize += 1;
+    }
+
+    return ships;
+  }
+
+  // get cords that are occupibale
+  #generateOccupiableCords(body, shipSize) {
+    let cords = [];
+    let areCordsOccupiable = false;
+
+    while (!areCordsOccupiable) {
+      const startRowIndex = getRandomNumInRange(0, 9);
+      const startBlockIndex = getRandomNumInRange(0, 9);
+      const orientation = this.#getRandomShipOrientation();
+
+      cords = this.#generateShipCords(
+        startRowIndex,
+        startBlockIndex,
+        shipSize,
+        orientation,
+      );
+      areCordsOccupiable = this.#areCordsOccupiable(body, cords);
+    }
+
+    // loop ends mean we successfuly generated the cords
+    return cords;
+  }
+
+  #placeShip(body, ship, cords = []) {
     cords.forEach(([rowIndex, blockInex]) => {
-      const block = this.body[rowIndex][blockInex];
+      const block = body[rowIndex][blockInex];
       block.ship = ship; // assigning the block' ship property to be the argument ship
     });
   }
 
-  attack(nthRow, nthBlock) {
-    const block = this.body[nthRow][nthBlock];
+  // places 10 ships on board on random cordinates
+  #placeShips(body) {
+    const ships = this.#generateShips();
+
+    ships.forEach((ship) => {
+      const cords = this.#generateOccupiableCords(body, ship.size);
+      // place ship on cords
+      this.#placeShip(body, ship, cords);
+    });
+  }
+
+  // generate board body and place ships on it
+  #body = this.#generateBoardBody();
+
+  #areShipsPlacedOnBoard = false;
+
+  get body() {
+    if (!this.#areShipsPlacedOnBoard) {
+      this.#placeShips(this.#body);
+      this.#areShipsPlacedOnBoard = true;
+    }
+    return this.#body;
+  }
+
+  attack(rowIndex, blockIndex) {
+    const block = this.body[rowIndex][blockIndex];
 
     if (!block.isAttacked && block.ship) {
       block.ship.getHit();
@@ -128,31 +219,6 @@ class Board {
 export default Board;
 
 // helper func to generate some cords
-export const generateShipCords = (
-  startRow,
-  startBlock,
-  shipSize,
-  orientation = "horizontal",
-) => {
-  let cords = [];
-
-  for (let i = 0; i < shipSize; i++) {
-    switch (orientation) {
-      case "horizontal":
-        cords.push([startRow, startBlock + i]);
-        break;
-      case "vertical":
-        cords.push([startRow + i, startBlock]);
-        break;
-      default:
-        cords = [];
-        break;
-    }
-  }
-
-  return cords;
-};
-
 // helepr func to get blocks from board using given cordinates
 export const getBoardBlocks = (boardBody, cords = []) => {
   return cords.map(([nthRow, nthBlock]) => boardBody[nthRow][nthBlock]);
