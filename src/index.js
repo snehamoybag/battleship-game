@@ -1,7 +1,8 @@
-import header from "./components/header";
-import main from "./components/main";
+import HeaderEl from "./components/HeaderEl";
 import "./index.css";
 
 const bodyEl = document.body;
+const headerEl = HeaderEl();
+const mainEl = document.createElement("main");
 
-bodyEl.append(header(), main());
+bodyEl.append(headerEl, mainEl);

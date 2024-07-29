@@ -1,0 +1,12 @@
+.block {
+  background-color: transparent;
+  border: 1px solid black;
+}
+
+.block:hover {
+  cursor: pointer;
+}
+
+.block.ship {
+  background-color: lightblue;
+}
