@@ -27,18 +27,66 @@ describe("board() generateion", () => {
   });
 });
 
+describe("areCordinatesValid()", () => {
+  test("returns true if all cordinates are valid, false otherwise", () => {
+    const validCordinates = cordinates;
+    const invalidCordinates = [
+      [-1, 0],
+      [1, 10],
+      [-1, 11],
+    ];
+    const validAndInvalidCordinates = [
+      [1, 9],
+      [0, -2],
+      [4, 4],
+      [9, 9],
+      [-1, -1],
+      [10, 10],
+    ];
+
+    expect(gameboad.areCordinatesValid(validCordinates)).toBe(true);
+    expect(gameboad.areCordinatesValid(invalidCordinates)).toBe(false);
+    expect(gameboad.areCordinatesValid(validAndInvalidCordinates)).toBe(false);
+  });
+});
+
 describe("placeShip()", () => {
   test("placeShip() places the ship on the given cordinates", () => {
-    const ship = new Ship(cordinates.length);
-
-    gameboad.placeShip(ship, cordinates);
+    gameboad.placeShip(cordinates);
 
     const areShipsPlacedOnCordinates = cordinates.every((cordinate) => {
       const [nthRow, nthColumn] = cordinate;
-      return (board[nthRow][nthColumn].ship = ship);
+      const shipOnCordinate = board[nthRow][nthColumn].ship;
+
+      return shipOnCordinate instanceof Ship;
     });
 
     expect(areShipsPlacedOnCordinates).toBe(true);
+  });
+});
+
+describe("areCordinatesFree()", () => {
+  const preOccupiedCordinates = cordinates; // we have placed ships on earlier test
+  const nonOccupiedCordinates = [
+    [9, 0],
+    [9, 1],
+    [9, 2],
+    [9, 3],
+  ];
+  const overlappingCordinates = [
+    [1, 0],
+    [1, 1],
+    [1, 2],
+    [1, 3],
+  ];
+
+  test("returns true if no ship is present on the given cordinates. false otherwise", () => {
+    expect(gameboad.areCordinatesFree(nonOccupiedCordinates)).toBe(true);
+    expect(gameboad.areCordinatesFree(preOccupiedCordinates)).toBe(false);
+  });
+
+  test("returns false if given cordinatates overlaps any placed ship. true otherwise", () => {
+    expect(gameboad.areCordinatesFree(overlappingCordinates)).toBe(false);
   });
 });
 
@@ -48,5 +96,19 @@ describe("recieveAttack()", () => {
     gameboad.recieveAttack(nthRow, nthColumn);
 
     expect(board[nthRow][nthColumn].isAttacked).toBe(true);
+  });
+
+  test("deals damage to the ship present on the given cordinates", () => {
+    const [nthRow, nthColumn] = cordinates[1];
+    const shipOnCordinate = board[nthRow][nthColumn].ship;
+
+    // check if ship actally is present
+    expect(shipOnCordinate instanceof Ship).toBe(true);
+
+    const prevHealth = shipOnCordinate.health;
+    gameboad.recieveAttack(nthRow, nthColumn);
+    const currentHealth = shipOnCordinate.health;
+
+    expect(currentHealth).toBe(prevHealth - 1);
   });
 });

@@ -1,3 +1,6 @@
+import Ship from "./Ship";
+import IsEmpty from "./IsEmpty";
+
 class Gameboard {
   #generateBoard() {
     const size = 10;
@@ -18,12 +21,55 @@ class Gameboard {
 
   #board = this.#generateBoard(); // to generate board only once
 
+  #isCordinateValid(boardSize, cordinate = []) {
+    const [nthRow, nthColumn] = cordinate;
+
+    const isRowInbound = nthRow >= 0 && nthRow < boardSize;
+    const isColumnInbound = nthColumn >= 0 && nthColumn < boardSize;
+
+    return isRowInbound && isColumnInbound;
+  }
+
+  #areCordinatesPreOccupied(board, cordinates = []) {
+    return cordinates.some(([nthRow, nthColumn]) => {
+      return board[nthRow][nthColumn].ship instanceof Ship;
+    });
+  }
+
+  #areCordinatesOverlapping(board, cordinates = []) {
+    return cordinates.some((cordinate) => {
+      const isEmpty = new IsEmpty(board, cordinate);
+
+      return isEmpty.check();
+    });
+  }
+
   board() {
     return this.#board;
   }
 
-  placeShip(ship, cordinates = []) {
+  areCordinatesValid(cordinates = []) {
     const board = this.board();
+
+    return cordinates.every((cordinate) =>
+      this.#isCordinateValid(board.length, cordinate),
+    );
+  }
+
+  areCordinatesFree(cordinates = []) {
+    if (!this.areCordinatesValid(cordinates)) return false;
+
+    const board = this.board();
+
+    if (this.#areCordinatesPreOccupied(board, cordinates)) return false;
+    if (this.#areCordinatesOverlapping(board, cordinates)) return false;
+
+    return true;
+  }
+
+  placeShip(cordinates = []) {
+    const board = this.board();
+    const ship = new Ship(cordinates.length);
 
     cordinates.forEach(([nthRow, nthColumn]) => {
       board[nthRow][nthColumn].ship = ship;
@@ -32,7 +78,10 @@ class Gameboard {
 
   recieveAttack(nthRow, nthColumn) {
     const board = this.board();
-    board[nthRow][nthColumn].isAttacked = true;
+    const block = board[nthRow][nthColumn];
+
+    block.isAttacked = true;
+    block.ship.hit();
   }
 }
 
