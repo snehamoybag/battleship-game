@@ -83,6 +83,21 @@ class Gameboard {
     block.isAttacked = true;
     block.ship.hit();
   }
+
+  didAllShipsSank() {
+    const board = this.board();
+
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board.length; j++) {
+        const ship = board[i][j].ship;
+
+        if (ship && ship.health > 0) return false; // still a ship left on the board, no need to check further
+      }
+    }
+
+    // loop ends means there is no ship available on the board or all ships have sanked
+    return true;
+  }
 }
 
 export default Gameboard;
