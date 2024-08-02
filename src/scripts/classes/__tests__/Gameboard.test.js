@@ -51,7 +51,7 @@ describe("areCordinatesValid()", () => {
 });
 
 describe("placeShip()", () => {
-  test("placeShip() places the ship on the given cordinates", () => {
+  test("placeShip() creates and places the ship on the given cordinates", () => {
     gameboad.placeShip(cordinates);
 
     const areShipsPlacedOnCordinates = cordinates.every((cordinate) => {
