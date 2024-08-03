@@ -7,9 +7,12 @@ class Player {
     this.name = name;
   }
 
-  get gameboard() {
-    return this.#gameboard;
-  }
+  board = this.#gameboard.board;
+  areCordinatesValid = this.#gameboard.areCordinatesValid;
+  hasCordinatesFree = this.#gameboard.areCordinatesFree;
+  placeShipOnBoard = this.#gameboard.placeShip;
+  recieveAttack = this.#gameboard.recieveAttack;
+  hasNoShipStanding = this.#gameboard.didAllShipsSank;
 }
 
 export default Player;
