@@ -3,7 +3,7 @@ import Gameboard from "../Gameboard";
 import Ship from "../Ship";
 
 const gameboad = new Gameboard();
-const board = gameboad.board();
+const board = gameboad.board;
 const cordinates = [
   [0, 0],
   [0, 1],
@@ -11,8 +11,8 @@ const cordinates = [
   [0, 3],
 ];
 
-describe("board() generateion", () => {
-  test("board() has 10 rows", () => {
+describe("board generateion", () => {
+  test(" has 10 rows", () => {
     const numOfRows = board.length;
 
     expect(numOfRows).toBe(10);
@@ -47,6 +47,7 @@ describe("areCordinatesValid()", () => {
     expect(gameboad.areCordinatesValid(validCordinates)).toBe(true);
     expect(gameboad.areCordinatesValid(invalidCordinates)).toBe(false);
     expect(gameboad.areCordinatesValid(validAndInvalidCordinates)).toBe(false);
+    expect(gameboad.areCordinatesValid([])).toBe(false);
   });
 });
 
