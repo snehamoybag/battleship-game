@@ -116,7 +116,10 @@ class Gameboard {
     const block = board[nthRow][nthColumn];
 
     block.isAttacked = true;
-    block.ship.hit();
+
+    if (block.ship) {
+      block.ship.hit();
+    }
   }
 
   didAllShipsSank() {
