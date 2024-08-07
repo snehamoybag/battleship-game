@@ -3,10 +3,6 @@
   border: 1px solid black;
 }
 
-.block:hover {
+.block.cursor-pointer:hover {
   cursor: pointer;
-}
-
-.block.ship {
-  background-color: lightblue;
 }

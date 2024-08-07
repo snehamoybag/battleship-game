@@ -54,19 +54,25 @@ class Player {
     });
   }
 
+  #getBoardWithShips() {
+    this.#placeShipsRandomly();
+
+    return this.#gameboard.board;
+  }
+
+  #board = this.#getBoardWithShips();
+
   constructor(name) {
     this.name = name;
   }
 
   get board() {
-    this.#placeShipsRandomly();
-    return this.#gameboard.board;
+    return this.#board;
   }
 
-  randomizeShipsOnBoard() {
-    // remove previously placed ships
+  placeShipsRandomly() {
+    // remove previous ships
     this.#gameboard.removeAllShips();
-
     this.#placeShipsRandomly();
   }
 

@@ -1,8 +1,13 @@
-.board {
+.board.show-ships .ship {
+  background: darkGreen;
+}
+
+.board__body {
+  --size: 400px;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
-  width: min(100%, 400px);
-  aspect-ratio: 1/1;
+  width: var(--size);
+  height: var(--size);
   border: 1px solid black;
 }

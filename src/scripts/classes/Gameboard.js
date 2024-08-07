@@ -11,7 +11,7 @@ class Gameboard {
 
       for (let j = 0; j < size; j++) {
         // create columns
-        board[i][j] = { isAttacked: false, ship: null };
+        board[i][j] = { cordinate: [i, j], isAttacked: false, ship: null };
       }
     }
 
