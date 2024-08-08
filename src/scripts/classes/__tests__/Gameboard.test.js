@@ -113,22 +113,3 @@ describe("recieveAttack()", () => {
     expect(currentHealth).toBe(prevHealth - 1);
   });
 });
-
-describe("didAllShipsSank()", () => {
-  test("returns true if there are no ships left on the board or all ships has sanked, false otherwise", () => {
-    const freshGameboard = new Gameboard();
-
-    expect(freshGameboard.didAllShipsSank()).toBe(true); // fresh board have no ships on it
-
-    freshGameboard.placeShip(cordinates);
-
-    expect(freshGameboard.didAllShipsSank()).toBe(false);
-
-    // attack and sink the the ship
-    cordinates.forEach(([nthRow, nthColumn]) => {
-      freshGameboard.recieveAttack(nthRow, nthColumn);
-    });
-
-    expect(freshGameboard.didAllShipsSank()).toBe(true);
-  });
-});

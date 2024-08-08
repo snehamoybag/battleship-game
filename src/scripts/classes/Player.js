@@ -76,9 +76,23 @@ class Player {
     this.#placeShipsRandomly();
   }
 
-  recieveAttack = this.#gameboard.recieveAttack;
+  recieveAttack(nthRow, nthColumn) {
+    this.#gameboard.recieveAttack(nthRow, nthColumn);
+  }
 
-  hasNoShipStanding = this.#gameboard.didAllShipsSank;
+  get numberOfShipsLeft() {
+    const shipsLeft = new Set();
+    const board = this.board;
+
+    board.forEach((row) =>
+      row.forEach((column) => {
+        const ship = column.ship;
+        if (ship && ship.health > 0) shipsLeft.add(ship);
+      }),
+    );
+
+    return shipsLeft.size;
+  }
 }
 
 export default Player;

@@ -2,6 +2,7 @@ import Game from "../scripts/classes/Game";
 import Player from "../scripts/classes/Player";
 import BoardEl from "./BoardEl";
 import ButtonEl from "./ButtonEl";
+import GameOverEl from "./GameOverEl";
 import "../styles/game.css";
 
 // battleship component
@@ -10,22 +11,45 @@ const BattleshipEl = () => {
   const human = new Player("Human");
   const bot = new Player("Bot");
 
+  let currentPlayer = human;
+  const switchCurrentPlayer = () => {
+    currentPlayer = currentPlayer === human ? bot : human;
+  };
+
   const battleShipEl = document.createElement("div");
   battleShipEl.classList.add("game");
 
   const buttonsWrapperEl = document.createElement("div");
   buttonsWrapperEl.classList.add("game__btns-wrapper");
 
-  const getHandleBlockClick = (player, event) => {
+  const handleGameOver = () => {
+    const winner = currentPlayer;
+    const winnerText = winner === human ? "You Win!" : "You Lose!";
+
+    battleShipEl.append(GameOverEl(winnerText));
+  };
+
+  const getHandleBlockClick = (player, renderEvent) => {
     return (nthRow, nthColumn) => {
       player.recieveAttack(nthRow, nthColumn);
-      battleShipEl.dispatchEvent(event);
+
+      const attackedShip = player.board[nthRow][nthColumn].ship;
+      const didAttackHitAShip = attackedShip !== null;
+
+      const isGameOver = player.numberOfShipsLeft === 0;
+
+      if (!isGameOver && !didAttackHitAShip) {
+        switchCurrentPlayer();
+      }
+
+      battleShipEl.dispatchEvent(renderEvent);
+
+      if (isGameOver) handleGameOver();
     };
   };
 
-  const humanBoardEventName = "render-human-board";
-  const humanBoardRenderEvent = new Event(humanBoardEventName);
-  const showShipsClassName = "show-ships";
+  const humanBoardRenderEventName = "render-human-board";
+  const humanBoardRenderEvent = new Event(humanBoardRenderEventName);
 
   const renderHumanBoardEl = () => {
     const id = "human-board";
@@ -33,7 +57,7 @@ const BattleshipEl = () => {
 
     const boardEl = BoardEl(
       id,
-      "Human's Board",
+      "Your Board",
       human.board,
       getHandleBlockClick(human, humanBoardRenderEvent),
       game.hasStarted,
@@ -41,7 +65,7 @@ const BattleshipEl = () => {
     );
 
     if (!game.hasStarted) {
-      boardEl.classList.add(showShipsClassName);
+      boardEl.classList.add("show-ships");
     }
 
     const domBoardEl = battleShipEl.querySelector(`#${id}`);
@@ -82,7 +106,12 @@ const BattleshipEl = () => {
     renderHumanBoardEl();
   };
 
-  const handleGameStart = () => {};
+  const handleGameStart = () => {
+    game.start();
+    buttonsWrapperEl.remove();
+    renderBotBoardEl();
+    renderHumanBoardEl();
+  };
 
   const randomizeButtonEl = ButtonEl(
     "Randomze",
@@ -102,6 +131,11 @@ const BattleshipEl = () => {
 
   buttonsWrapperEl.append(randomizeButtonEl, startGameButtonEl);
   battleShipEl.append(buttonsWrapperEl);
+
+  // listen for custom events
+  battleShipEl.addEventListener(humanBoardRenderEventName, renderHumanBoardEl);
+  battleShipEl.addEventListener(botBoardRenderEventName, renderBotBoardEl);
+
   return battleShipEl;
 };
 

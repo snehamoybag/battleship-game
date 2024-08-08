@@ -6,3 +6,11 @@
 .block.cursor-pointer:hover {
   cursor: pointer;
 }
+
+.block.hit {
+  background-color: red;
+}
+
+.block.miss {
+  background-color: black;
+}

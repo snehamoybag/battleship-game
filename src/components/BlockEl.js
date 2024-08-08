@@ -6,6 +6,7 @@ const BlockEl = (block, handleClick, hasGameStarted, showShips = true) => {
   blockEl.type = "button";
 
   blockEl.classList.add("block");
+
   if (block.ship && showShips) blockEl.classList.add("ship");
 
   if (!hasGameStarted || block.isAttacked) blockEl.disabled = true;
@@ -13,6 +14,14 @@ const BlockEl = (block, handleClick, hasGameStarted, showShips = true) => {
   if (hasGameStarted) {
     blockEl.classList.add("cursor-pointer");
     blockEl.onclick = handleClick;
+  }
+
+  if (block.isAttacked && block.ship) {
+    blockEl.classList.add("hit");
+  }
+
+  if (block.isAttacked && !block.ship) {
+    blockEl.classList.add("miss");
   }
 
   let blockText = `${block.cordinate[0]}, ${block.cordinate[1]}`;
