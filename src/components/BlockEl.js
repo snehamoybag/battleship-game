@@ -3,30 +3,38 @@ import "../styles/block.css";
 
 const BlockEl = (block, handleClick, hasGameStarted, showShips = true) => {
   const blockEl = document.createElement("button");
+  blockEl.classList.add("block");
   blockEl.type = "button";
 
-  blockEl.classList.add("block");
+  const ship = block.ship;
+  const isAttacked = block.isAttacked;
 
-  if (block.ship && showShips) blockEl.classList.add("ship");
+  if (showShips && ship) {
+    blockEl.classList.add("ship");
+  }
 
-  if (!hasGameStarted || block.isAttacked) blockEl.disabled = true;
+  if (!hasGameStarted || isAttacked) {
+    blockEl.disabled = true;
+  }
 
   if (hasGameStarted) {
-    blockEl.classList.add("cursor-pointer");
     blockEl.onclick = handleClick;
   }
 
-  if (block.isAttacked && block.ship) {
-    blockEl.classList.add("hit");
-  }
-
-  if (block.isAttacked && !block.ship) {
-    blockEl.classList.add("miss");
-  }
-
-  let blockText = `${block.cordinate[0]}, ${block.cordinate[1]}`;
+  let blockText = `(${block.cordinate[0]}, ${block.cordinate[1]})`;
 
   const blockTextEl = SrOnlyEl("span", blockText);
+
+  const markerEl = document.createElement("span");
+  markerEl.classList.add("block__marker");
+
+  if (ship) markerEl.classList.add("hit");
+  else markerEl.classList.add("miss");
+
+  // append the marker only after attack is done
+  if (isAttacked) {
+    blockEl.append(markerEl);
+  }
 
   blockEl.append(blockTextEl);
   return blockEl;

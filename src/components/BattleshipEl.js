@@ -53,7 +53,7 @@ const BattleshipEl = () => {
 
   const renderHumanBoardEl = () => {
     const id = "human-board";
-    const showShips = game.hasStarted === false;
+    const showShips = true;
 
     const boardEl = BoardEl(
       id,
@@ -63,10 +63,6 @@ const BattleshipEl = () => {
       game.hasStarted,
       showShips,
     );
-
-    if (!game.hasStarted) {
-      boardEl.classList.add("show-ships");
-    }
 
     const domBoardEl = battleShipEl.querySelector(`#${id}`);
 
@@ -109,8 +105,8 @@ const BattleshipEl = () => {
   const handleGameStart = () => {
     game.start();
     buttonsWrapperEl.remove();
-    renderBotBoardEl();
     renderHumanBoardEl();
+    renderBotBoardEl();
   };
 
   const randomizeButtonEl = ButtonEl(

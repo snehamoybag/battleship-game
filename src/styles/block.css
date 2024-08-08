@@ -1,16 +1,78 @@
 .block {
   background-color: transparent;
+  position: relative;
   border: 1px solid black;
 }
 
-.block.cursor-pointer:hover {
+.block:hover {
   cursor: pointer;
 }
 
-.block.hit {
-  background-color: red;
+.block:disabled {
+  cursor: not-allowed;
 }
 
-.block.miss {
+.block.ship {
+  border: none;
+}
+
+.block.ship::before {
+  content: "";
+  background-color: darkgreen;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.block__marker {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.block__marker:hover {
+  cursor: not-allowed;
+}
+
+.block__marker.hit {
+  --color: red;
+  background-color: transparent;
+  border: 2px solid var(--color);
+}
+
+.block__marker.hit::before,
+.block__marker.hit::after {
+  --rotation-angle: 45deg;
+
+  content: "";
+  width: 5px;
+  height: 100%;
+  background-color: var(--color);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(var(--rotation-angle));
+}
+
+.block__marker.hit::after {
+  --rotation-angle: 135deg;
+}
+
+.block__marker.miss::after {
+  --size: 20%;
+
+  content: "";
+  width: var(--size);
+  height: var(--size);
   background-color: black;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.35;
 }
