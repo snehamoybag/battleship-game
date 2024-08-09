@@ -1,6 +1,6 @@
 .game {
   display: grid;
-  grid-row-gap: 2rem;
+  grid-row-gap: 1rem;
 }
 
 .game__player-turn {
@@ -28,4 +28,5 @@
 
 .game__btns-wrapper > .btn--restart {
   margin: 0 auto;
+  margin-top: 1rem;
 }
