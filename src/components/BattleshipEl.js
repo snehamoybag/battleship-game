@@ -27,7 +27,8 @@ const BattleshipEl = () => {
 
   const renderPlayerTurnEl = () => {
     const id = "player-turn";
-    const playerTurnEl = BattleshipPlayerTurnEl(id, game.currentPlayer.name);
+    const turnText = game.currentPlayer === human ? "Your Turn" : "Bot's Turn";
+    const playerTurnEl = BattleshipPlayerTurnEl(id, turnText);
     const domPlayerTurnEl = battleShipEl.querySelector(`#${id}`);
 
     if (domPlayerTurnEl) {
