@@ -7,12 +7,16 @@
   border: 1px solid black;
 }
 
-.block.cursor-pointer:hover {
-  cursor: pointer;
+.block:active {
+  transform: scale(95%);
 }
 
 .block:disabled {
   cursor: not-allowed;
+}
+
+.block.cursor-pointer:hover {
+  cursor: pointer;
 }
 
 .block.ship {

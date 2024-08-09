@@ -19,8 +19,13 @@
 
 .game__btns-wrapper {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  padding: 2em 1em;
+  gap: 0.75rem;
+  width: 60%; /* aligns with the boards */
+  padding: 0 1em;
+  margin: 0 auto;
+}
+
+.game__btns-wrapper > .btn--restart {
+  margin: 0 auto;
 }

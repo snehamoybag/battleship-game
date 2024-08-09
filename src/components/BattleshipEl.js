@@ -5,6 +5,7 @@ import BoardEl from "./BoardEl";
 import BattleshipButtonEls from "./BattleshipButtonEls";
 import GameOverEl from "./GameOverEl";
 import "../styles/game.css";
+import "../styles/btn.css";
 
 // battleship component
 const BattleshipEl = () => {
