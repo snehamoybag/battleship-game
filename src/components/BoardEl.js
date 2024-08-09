@@ -44,7 +44,9 @@ const hasDeadShipBesideIt = (board, block) => {
 const BoardEl = (
   boardId,
   titleText,
+  numberOfShipsLeft,
   board,
+  enableBlockClick,
   handleBlockClick,
   hasGameStarted,
   showShips = true,
@@ -56,6 +58,9 @@ const BoardEl = (
   const titleEl = document.createElement("h2");
   titleEl.classList.add("board__title");
   titleEl.textContent = titleText;
+
+  const numberOfShipsLeftEl = document.createElement("span");
+  numberOfShipsLeftEl.textContent = `(Ships left: ${numberOfShipsLeft})`;
 
   const boardBodyEl = document.createElement("div");
   boardBodyEl.classList.add("board__body");
@@ -70,6 +75,7 @@ const BoardEl = (
 
       const blockEl = BlockEl(
         block,
+        enableBlockClick,
         () => handleBlockClick(...block.cordinate),
         hasGameStarted,
         showShips,
@@ -77,6 +83,10 @@ const BoardEl = (
 
       boardBodyEl.append(blockEl);
     }
+  }
+
+  if (hasGameStarted) {
+    titleEl.append(numberOfShipsLeftEl);
   }
 
   boardEl.append(titleEl, boardBodyEl);

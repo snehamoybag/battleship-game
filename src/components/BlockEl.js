@@ -1,7 +1,13 @@
 import SrOnlyEl from "./SrOnlyEl";
 import "../styles/block.css";
 
-const BlockEl = (block, handleClick, hasGameStarted, showShips = true) => {
+const BlockEl = (
+  block,
+  enableClick,
+  handleClick,
+  hasGameStarted,
+  showShips = true,
+) => {
   const blockEl = document.createElement("button");
   blockEl.classList.add("block");
   blockEl.type = "button";
@@ -13,12 +19,16 @@ const BlockEl = (block, handleClick, hasGameStarted, showShips = true) => {
     blockEl.classList.add("ship");
   }
 
-  if (!hasGameStarted || isAttacked) {
-    blockEl.disabled = true;
-  }
-
   if (hasGameStarted) {
     blockEl.onclick = handleClick;
+
+    if (enableClick) {
+      blockEl.classList.add("cursor-pointer");
+    }
+
+    if (!enableClick || isAttacked) {
+      blockEl.disabled = true;
+    }
   }
 
   let blockText = `(${block.cordinate[0]}, ${block.cordinate[1]})`;
