@@ -1,9 +1,17 @@
+.board__title {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em 1em;
+}
+
 .board__body {
   --size: 400px;
+
+  box-sizing: initial; /* dont count border for precise grid size calculations */
+  width: var(--size);
+  height: var(--size);
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
-  width: var(--size);
-  height: var(--size);
   border: 1px solid black;
 }

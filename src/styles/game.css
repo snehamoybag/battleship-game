@@ -1,13 +1,26 @@
+.game {
+  display: grid;
+  grid-row-gap: 2rem;
+}
+
+.game__player-turn {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
 .game__boards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 5rem;
 }
 
 .game__btns-wrapper {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  padding: 2em 1em;
 }
