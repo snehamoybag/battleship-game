@@ -5,8 +5,8 @@ const getRandomUnAttackedCordinate = (board) => {
   const minIndex = 0;
   const maxIndex = board.length - 1;
 
-  let nthRow = 0;
-  let nthColumnn = 0;
+  let nthRow = getRandomNumInRange(minIndex, maxIndex);
+  let nthColumnn = getRandomNumInRange(minIndex, maxIndex);
 
   // if the block is already attacked, we need to find a new block that is not attacked
   while (board[nthRow][nthColumnn].isAttacked) {
