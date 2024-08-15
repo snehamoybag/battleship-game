@@ -11,6 +11,7 @@ const BlockEl = (
   const blockEl = document.createElement("button");
   blockEl.classList.add("block");
   blockEl.type = "button";
+  blockEl.dataset.cordinate = String(block.cordinate);
 
   const ship = block.ship;
   const isAttacked = block.isAttacked;

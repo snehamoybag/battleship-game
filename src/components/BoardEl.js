@@ -1,15 +1,6 @@
 import BlockEl from "./BlockEl";
+import isInbound from "../scripts/helpers/isInbound";
 import "../styles/board.css";
-
-const isInbound = (board, nthRow, nthColumn) => {
-  const startIndex = 0;
-  const lastIndex = board.length - 1;
-
-  const isRowInbound = nthRow >= startIndex && nthRow <= lastIndex;
-  const isColumnInbound = nthColumn >= startIndex && nthColumn <= lastIndex;
-
-  return isRowInbound && isColumnInbound;
-};
 
 const hasDeadShipBesideIt = (board, block) => {
   const [nthRow, nthColumn] = block.cordinate;
@@ -27,11 +18,12 @@ const hasDeadShipBesideIt = (board, block) => {
 
   const cordinateValues = Object.values(surroundingCordinates);
 
-  return cordinateValues.some(([nthRow, nthColumn]) => {
-    if (!isInbound(board, nthRow, nthColumn)) return false;
+  // check if any of the cordinates has a dead ship near it
+  return cordinateValues.some((currentCordinate) => {
+    if (!isInbound(0, board.length - 1, currentCordinate)) return false;
 
-    const block = board[nthRow][nthColumn];
-    const ship = block.ship;
+    const [nthRow, nthColumn] = currentCordinate;
+    const ship = board[nthRow][nthColumn].ship;
 
     if (ship && ship.isSunk()) {
       return true;
