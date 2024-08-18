@@ -80,6 +80,10 @@ class Player {
     this.#gameboard.recieveAttack(nthRow, nthColumn);
   }
 
+  revealSurroundingBlocks(cordinate) {
+    this.#gameboard.revealSurroundingBlocks(cordinate);
+  }
+
   get numberOfShipsLeft() {
     const shipsLeft = new Set();
     const board = this.board;

@@ -15,39 +15,58 @@ const BlockEl = (
 
   const ship = block.ship;
   const isAttacked = block.isAttacked;
+  const isRevealed = block.isRevealed;
 
   if (showShips && ship) {
-    blockEl.classList.add("ship");
+    blockEl.classList.add("block--ship");
   }
 
+  if (isRevealed) {
+    blockEl.classList.add("block--revealed");
+  }
+
+  if (isAttacked) {
+    blockEl.classList.add("attacked");
+  }
+
+  // when game starts
   if (hasGameStarted) {
-    blockEl.onclick = handleClick;
+    if (showShips) {
+      blockEl.classList.add("translucent");
+    }
 
     if (enableClick) {
       blockEl.classList.add("cursor-pointer");
     }
 
-    if (!enableClick || isAttacked) {
+    if (!isAttacked || !isRevealed) {
+      blockEl.onclick = handleClick;
+    }
+
+    if (!enableClick || isAttacked || isRevealed) {
       blockEl.disabled = true;
     }
   }
 
+  // marker
   let blockText = `(${block.cordinate[0]}, ${block.cordinate[1]})`;
-
   const blockTextEl = SrOnlyEl("span", blockText);
 
   const markerEl = document.createElement("span");
   markerEl.classList.add("block__marker");
 
-  if (ship) markerEl.classList.add("hit");
-  else markerEl.classList.add("miss");
+  if (ship) {
+    markerEl.classList.add("hit");
+  } else {
+    markerEl.classList.add("miss");
+  }
 
+  blockEl.append(blockTextEl);
   // append the marker only after attack is done
   if (isAttacked) {
     blockEl.append(markerEl);
   }
 
-  blockEl.append(blockTextEl);
   return blockEl;
 };
 

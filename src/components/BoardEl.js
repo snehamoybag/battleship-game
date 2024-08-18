@@ -1,37 +1,5 @@
 import BlockEl from "./BlockEl";
-import isInbound from "../scripts/helpers/isInbound";
 import "../styles/board.css";
-
-const hasDeadShipBesideIt = (board, block) => {
-  const [nthRow, nthColumn] = block.cordinate;
-
-  const surroundingCordinates = {
-    top: [nthRow - 1, nthColumn],
-    topLeft: [nthRow - 1, nthColumn - 1],
-    topRight: [nthRow - 1, nthColumn + 1],
-    bottom: [nthRow + 1, nthColumn],
-    bottomLeft: [nthRow + 1, nthColumn - 1],
-    bottomRight: [nthRow + 1, nthColumn + 1],
-    left: [nthRow, nthColumn - 1],
-    right: [nthRow, nthColumn + 1],
-  };
-
-  const cordinateValues = Object.values(surroundingCordinates);
-
-  // check if any of the cordinates has a dead ship near it
-  return cordinateValues.some((currentCordinate) => {
-    if (!isInbound(0, board.length - 1, currentCordinate)) return false;
-
-    const [nthRow, nthColumn] = currentCordinate;
-    const ship = board[nthRow][nthColumn].ship;
-
-    if (ship && ship.isSunk()) {
-      return true;
-    }
-
-    return false;
-  });
-};
 
 const BoardEl = (
   boardId,
@@ -57,25 +25,19 @@ const BoardEl = (
   const boardBodyEl = document.createElement("div");
   boardBodyEl.classList.add("board__body");
 
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board.length; j++) {
-      const block = board[i][j];
-
-      if (!block.ship && hasDeadShipBesideIt(board, block)) {
-        block.isAttacked = true;
-      }
-
+  board.forEach((row) =>
+    row.forEach((column) => {
+      // column === block
       const blockEl = BlockEl(
-        block,
+        column,
         enableBlockClick,
-        () => handleBlockClick(...block.cordinate),
+        () => handleBlockClick(...column.cordinate),
         hasGameStarted,
         showShips,
       );
-
       boardBodyEl.append(blockEl);
-    }
-  }
+    }),
+  );
 
   if (hasGameStarted) {
     titleEl.append(numberOfShipsLeftEl);

@@ -69,6 +69,13 @@ const BattleshipEl = () => {
       const attackedShip = player.board[nthRow][nthColumn].ship;
       const didAttackHitAShip = attackedShip !== null;
 
+      // auto reveal surrounding blocks if ship sank
+      if (didAttackHitAShip && attackedShip.isSunk()) {
+        attackedShip.occupiedCordinates.forEach((cordinate) => {
+          player.revealSurroundingBlocks(cordinate);
+        });
+      }
+
       const isGameOver = player.numberOfShipsLeft === 0;
       game.isOVer = isGameOver; // update game state
 
@@ -132,6 +139,12 @@ const BattleshipEl = () => {
     }
   };
 
+  const renderEls = () => {
+    renderPlayerTurnEl();
+    renderHumanBoardEl();
+    renderBotBoardEl();
+  };
+
   const handleBotTurn = () => {
     const humanBoardDomEl = document.querySelector(`#${humanBoardId}`);
     const ONE_SECOND = 1000;
@@ -146,9 +159,7 @@ const BattleshipEl = () => {
 
   const handleGameStart = () => {
     game.start();
-    renderPlayerTurnEl();
-    renderHumanBoardEl();
-    renderBotBoardEl();
+    renderEls();
   };
 
   const buttonEls = BattleshipButtonEls(
@@ -160,15 +171,11 @@ const BattleshipEl = () => {
   battleShipEl.append(boardsEl, buttonEls);
 
   // initial render
-  renderPlayerTurnEl();
-  renderHumanBoardEl();
-  renderBotBoardEl();
+  renderEls();
 
   // listen for custom events
   battleShipEl.addEventListener(renderEventName, () => {
-    renderPlayerTurnEl();
-    renderHumanBoardEl();
-    renderBotBoardEl();
+    renderEls();
 
     if (game.currentPlayer === bot) {
       handleBotTurn();

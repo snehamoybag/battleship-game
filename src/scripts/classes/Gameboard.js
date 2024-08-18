@@ -1,3 +1,4 @@
+import isInbound from "../helpers/isInbound";
 import Ship from "./Ship";
 
 class Gameboard {
@@ -10,8 +11,13 @@ class Gameboard {
       board[i] = [];
 
       for (let j = 0; j < size; j++) {
-        // create columns
-        board[i][j] = { cordinate: [i, j], isAttacked: false, ship: null };
+        // create columns/blocks
+        board[i][j] = {
+          cordinate: [i, j],
+          isAttacked: false,
+          isRevealed: false,
+          ship: null,
+        };
       }
     }
 
@@ -20,17 +26,29 @@ class Gameboard {
 
   #board = this.#generateBoard(); // to generate board only once
 
+  #getSurroundingCordinates(currentCordinate) {
+    const [nthRow, nthColumn] = currentCordinate;
+
+    const surroundingCordinates = {
+      top: [nthRow - 1, nthColumn],
+      topLeft: [nthRow - 1, nthColumn - 1],
+      topRight: [nthRow - 1, nthColumn + 1],
+      right: [nthRow, nthColumn + 1],
+      bottom: [nthRow + 1, nthColumn],
+      bottomLeft: [nthRow + 1, nthColumn - 1],
+      botomRight: [nthRow + 1, nthColumn + 1],
+      left: [nthRow, nthColumn - 1],
+    };
+
+    const surroundingCordinatesArr = Object.values(surroundingCordinates);
+    return surroundingCordinatesArr;
+  }
+
   #isCordinateValid(cordinate = []) {
-    if (!Array.isArray(cordinate)) return false;
-    if (cordinate.length < 2 || cordinate.length > 2) return false;
+    const minNum = 0;
+    const maxNum = this.#board.length - 1;
 
-    const boardSize = this.#board.length;
-    const [nthRow, nthColumn] = cordinate;
-
-    const isRowInbound = nthRow >= 0 && nthRow < boardSize;
-    const isColumnInbound = nthColumn >= 0 && nthColumn < boardSize;
-
-    return isRowInbound && isColumnInbound;
+    return isInbound(minNum, maxNum, cordinate);
   }
 
   #isCordinatePreOccupied(cordinate) {
@@ -45,22 +63,10 @@ class Gameboard {
   }
 
   #isCordinateOverlapping(cordinate) {
-    const [nthRow, nthColumn] = cordinate;
-    const surroundingCordinates = {
-      top: [nthRow - 1, nthColumn],
-      topLeft: [nthRow - 1, nthColumn - 1],
-      topRight: [nthRow - 1, nthColumn + 1],
-      right: [nthRow, nthColumn + 1],
-      bottom: [nthRow + 1, nthColumn],
-      bottomLeft: [nthRow + 1, nthColumn - 1],
-      botomRight: [nthRow + 1, nthColumn + 1],
-      left: [nthRow, nthColumn - 1],
-    };
-
-    const surroundingCordinatesValues = Object.values(surroundingCordinates);
+    const surroundingCordinates = this.#getSurroundingCordinates(cordinate);
 
     // check if some cordinates have ship in it
-    const isOverlapping = surroundingCordinatesValues.some((cordinate) => {
+    const isOverlapping = surroundingCordinates.some((cordinate) => {
       if (!this.#isCordinateValid(cordinate)) return false; // invalid cordinate has no ship
 
       return this.#isCordinatePreOccupied(cordinate);
@@ -97,7 +103,9 @@ class Gameboard {
   placeShip(cordinates = []) {
     const board = this.board;
     const ship = new Ship(cordinates.length);
+    ship.occupiedCordinates = cordinates;
 
+    // place ship on the cordinates
     cordinates.forEach(([nthRow, nthColumn]) => {
       board[nthRow][nthColumn].ship = ship;
     });
@@ -120,6 +128,20 @@ class Gameboard {
     if (block.ship) {
       block.ship.hit();
     }
+  }
+
+  revealSurroundingBlocks(cordinate) {
+    const surroundingCordinates = this.#getSurroundingCordinates(cordinate);
+
+    return surroundingCordinates.forEach((currentCordinate) => {
+      if (this.#isCordinateValid(currentCordinate)) {
+        const [nthRow, nthColumn] = currentCordinate;
+        const currentBlock = this.board[nthRow][nthColumn];
+        const hasShip = currentBlock.ship !== null;
+
+        if (!hasShip) currentBlock.isRevealed = true;
+      }
+    });
   }
 }
 

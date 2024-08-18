@@ -22,14 +22,14 @@ const BattleshipButtonEls = (
   };
 
   const randomizeButtonEl = ButtonEl(
-    "Randomze",
+    "Randomize",
     ["btn", "btns--randomize"],
     handleRandomize,
   );
 
   const restartGameButtonEl = ButtonEl(
     "Restart Game",
-    ["btn", "btn--restart"],
+    ["btn", "btn--restart-outline"],
     handleRestartGame,
   );
 
