@@ -1,0 +1,24 @@
+.game-over-modal {
+  --size: 100%;
+  --backdrop: brightness(10%) blur(10px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: var(--size);
+  height: var(--size);
+  -webkit-backdrop-filter: var(--backdrop);
+  backdrop-filter: var(--backdrop);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.game-over-modal > h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+}

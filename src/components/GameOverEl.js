@@ -1,6 +1,7 @@
 import ButtonEl from "./ButtonEl";
+import "../styles/game-over-modal.css";
 
-const GameOverEl = (winnerText) => {
+const GameOverEl = (winnerText, handleRestart) => {
   const gameOverEl = document.createElement("div");
   gameOverEl.classList.add("game-over-modal");
 
@@ -9,11 +10,8 @@ const GameOverEl = (winnerText) => {
 
   const restartButtonEl = ButtonEl(
     "Restart Game",
-    ["btn", "btn--restart"],
-    () => {
-      // reload window
-      console.log("clicked");
-    },
+    ["btn", "btn--restart-fill"],
+    handleRestart,
   );
 
   gameOverEl.append(winnerTextEl, restartButtonEl);

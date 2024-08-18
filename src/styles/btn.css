@@ -14,7 +14,14 @@
   transform: scale(97%);
 }
 
-.btn--restart {
+.btn--restart-outline {
   color: red;
   border-color: red;
+}
+
+.btn--restart-fill {
+  font-weight: 700;
+  color: white;
+  background-color: red;
+  border: 2px solid white;
 }

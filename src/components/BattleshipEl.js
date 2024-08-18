@@ -32,7 +32,14 @@ const BattleshipEl = () => {
 
   const renderPlayerTurnEl = () => {
     const id = "player-turn";
-    const turnText = game.currentPlayer === human ? "Your Turn" : "Bot's Turn";
+    let turnText = "";
+
+    if (game.hasStarted) {
+      turnText = game.currentPlayer === human ? "Your Turn" : "Bot's Turn";
+    } else {
+      turnText = "Take Positions";
+    }
+
     const playerTurnEl = BattleshipPlayerTurnEl(id, turnText);
     const domPlayerTurnEl = battleShipEl.querySelector(`#${id}`);
 
@@ -43,11 +50,16 @@ const BattleshipEl = () => {
     }
   };
 
+  const handleGameRestart = () => location.reload();
+
   const handleGameOver = () => {
     const winner = game.currentPlayer;
     const winnerText = winner === human ? "You Win!" : "You Lose!";
+    const ONE_SECOND = 1000;
 
-    battleShipEl.append(GameOverEl(winnerText));
+    setTimeout(() => {
+      battleShipEl.append(GameOverEl(winnerText, handleGameRestart));
+    }, ONE_SECOND);
   };
 
   const getHandleBlockClick = (player) => {
@@ -122,9 +134,9 @@ const BattleshipEl = () => {
 
   const handleBotTurn = () => {
     const humanBoardDomEl = document.querySelector(`#${humanBoardId}`);
-    const ONE_SECONED = 1000;
+    const ONE_SECOND = 1000;
 
-    playBotTurn(human.board, humanBoardDomEl, game.isOVer, ONE_SECONED);
+    playBotTurn(human.board, humanBoardDomEl, game.isOVer, ONE_SECOND);
   };
 
   const handleRandomize = () => {
@@ -134,12 +146,15 @@ const BattleshipEl = () => {
 
   const handleGameStart = () => {
     game.start();
+    renderPlayerTurnEl();
     renderHumanBoardEl();
     renderBotBoardEl();
   };
 
-  const buttonEls = BattleshipButtonEls(handleRandomize, handleGameStart, () =>
-    console.log("restarted"),
+  const buttonEls = BattleshipButtonEls(
+    handleRandomize,
+    handleGameStart,
+    handleGameRestart,
   );
 
   battleShipEl.append(boardsEl, buttonEls);
