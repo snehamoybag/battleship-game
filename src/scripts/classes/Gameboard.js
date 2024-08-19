@@ -136,10 +136,9 @@ class Gameboard {
     return surroundingCordinates.forEach((currentCordinate) => {
       if (this.#isCordinateValid(currentCordinate)) {
         const [nthRow, nthColumn] = currentCordinate;
-        const currentBlock = this.board[nthRow][nthColumn];
-        const hasShip = currentBlock.ship !== null;
 
-        if (!hasShip) currentBlock.isRevealed = true;
+        const currentBlock = this.board[nthRow][nthColumn];
+        currentBlock.isRevealed = true;
       }
     });
   }

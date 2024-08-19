@@ -4,7 +4,7 @@ import BattleshipPlayerTurnEl from "./BattleshipPlayerTurnEl";
 import BoardEl from "./BoardEl";
 import BattleshipButtonEls from "./BattleshipButtonEls";
 import GameOverEl from "./GameOverEl";
-import playBotTurn from "../scripts/game/bot";
+import playBotTurn from "../scripts/bot/playBotTurn";
 import "../styles/game.css";
 import "../styles/btn.css";
 

@@ -21,12 +21,8 @@ const BlockEl = (
     blockEl.classList.add("block--ship");
   }
 
-  if (isRevealed) {
+  if (!isAttacked && isRevealed) {
     blockEl.classList.add("block--revealed");
-  }
-
-  if (isAttacked) {
-    blockEl.classList.add("attacked");
   }
 
   // when game starts
@@ -39,7 +35,7 @@ const BlockEl = (
       blockEl.classList.add("cursor-pointer");
     }
 
-    if (!isAttacked || !isRevealed) {
+    if (!isAttacked && !isRevealed) {
       blockEl.onclick = handleClick;
     }
 

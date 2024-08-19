@@ -6,16 +6,17 @@ const getRandomUnAttackedCordinate = (board) => {
   const maxIndex = board.length - 1;
 
   let nthRow = getRandomNumInRange(minIndex, maxIndex);
-  let nthColumnn = getRandomNumInRange(minIndex, maxIndex);
+  let nthColumn = getRandomNumInRange(minIndex, maxIndex);
+  let block = board[nthRow][nthColumn];
 
   // if the block is already attacked, we need to find a new block that is not attacked
-  while (board[nthRow][nthColumnn].isAttacked) {
+  while (block.isAttacked || block.isRevealed) {
     nthRow = getRandomNumInRange(minIndex, maxIndex);
-    nthColumnn = getRandomNumInRange(minIndex, maxIndex);
+    nthColumn = getRandomNumInRange(minIndex, maxIndex);
+    block = board[nthRow][nthColumn];
   }
 
-  const unAttackedBlockCordinate = [nthRow, nthColumnn];
-  return unAttackedBlockCordinate;
+  return [nthRow, nthColumn];
 };
 
 const isAttackSuccessful = (board, cordinate) => {
@@ -125,7 +126,7 @@ const attackInCurrentDirection = (board, boardEl, delay) => {
   const attackBlock = board[attackCordinate[0]][attackCordinate[1]];
   const attackBlockEl = getBlockEl(boardEl, attackCordinate);
 
-  if (!attackBlockEl || attackBlock.isAttacked === true) {
+  if (!attackBlockEl || attackBlock.isAttacked || attackBlock.isRevealed) {
     attackInOppositeDirection();
     return;
   }
