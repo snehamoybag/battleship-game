@@ -13,5 +13,9 @@
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
-  border: 1px solid black;
+  border: 1px solid hsla(var(--clr-neutral-900));
+}
+
+.board__body.focus {
+  outline: 2px solid hsla(var(--clr-primary-400));
 }

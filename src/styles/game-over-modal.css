@@ -20,5 +20,5 @@
 .game-over-modal > h2 {
   font-size: 2rem;
   font-weight: 700;
-  color: white;
+  color: hsla(var(--clr-neutral-100));
 }
